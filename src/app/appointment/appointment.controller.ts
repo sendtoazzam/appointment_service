@@ -6,6 +6,9 @@ import { GetSlotResponseDTO } from './dto/response/get-slot.response.dto';
 import { SlotUnavailableException } from './exception/slot-unavailable.exception';
 import { SlotBookRequestDTO } from './dto/request/slot-book/slot-book.request.dto';
 import { AppointmentResponseDTO } from './dto/response/appointment.response.dto';
+import { ResourceNotFoundException } from 'src/common/exception/resource-not-found.exception';
+import { ObjectId } from 'mongoose';
+import { ParseObjectIdPipe } from 'src/common/pipe/parse-object-id.pipe';
 
 @Controller('appointment')
 export class AppointmentController {
@@ -23,10 +26,20 @@ export class AppointmentController {
         @Query('date') slotBookDate: string,
     ): Promise<GetSlotResponseDTO[]> {
         const slots = await this.appointmentService.getAvailableSlots(slotBookDate);
-
-        if (!slots) throw new SlotUnavailableException(`No slots available`);
-
         return slots.map(GetSlotResponseDTO.fromModel);
+    }
+
+    @Public()
+    @Get(':id')
+    @ApiResponse({
+        status: 200,
+        type: Object
+    })
+    async getAppointmentDetails(
+        @Param('id', ParseObjectIdPipe) appointmentId: string,
+    ): Promise<AppointmentResponseDTO> {
+        const details = await this.appointmentService.getAppointmentDetails(appointmentId);
+        return AppointmentResponseDTO.fromModel(details);
     }
 
     @Public()

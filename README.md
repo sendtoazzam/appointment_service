@@ -101,31 +101,43 @@ curl --location 'localhost:3000/v1/auth/register' \
 }'
 ```
 
-### get pi value
+### get appointment slots
 ```
-curl --location --request GET 'localhost:3000/v1/calculator/pi-calculator' \
---header 'X-AUTH-USER-DATA: <token from login>' \
+curl --location --request GET 'localhost:3000/v1/appointment/slots?date=<yyyy-mm-dd>' \
 --header 'Content-Type: application/json' \
 ```
 
-### get pi value history
+### book appointment
 ```
-curl --location --request GET 'localhost:3000/v1/calculator/pi-history' \
---header 'X-AUTH-USER-DATA: <token from login>' \
+curl --location 'http://localhost:3000/v1/appointment/book' \
+--header 'Content-Type: application/json' \
+--data '{
+    "name": "Azzam",
+    "date": "2025-01-28",
+    "time": "11:30"
+}'
+```
+
+### Confirm appointment
+```
+curl --location --request PUT 'http://localhost:3000/v1/appointment/:id/confirm' \
+--header 'Content-Type: application/json' \
+--data '{
+    "name": "Azzam",
+    "date": "2025-01-28",
+    "time": "11:30"
+}'
+```
+
+### Get appointment details
+```
+curl --location --request GET 'http://localhost:3000/v1/appointment/:id' \
 --header 'Content-Type: application/json' \
 ```
 
-### calculate new pi value
+### Cancel appointment
 ```
-curl --location --request GET 'localhost:3000/v1/calculator/calculate-pi' \
---header 'X-AUTH-USER-DATA: <token from login>' \
---header 'Content-Type: application/json' \
-```
-
-### circumference of the sun
-```
-curl --location --request GET 'localhost:3000/v1/calculator/sun-circumference' \
---header 'X-AUTH-USER-DATA: <token from login>' \
+curl --location --request PUT 'http://localhost:3000/v1/appointment/:id/cancel' \
 --header 'Content-Type: application/json' \
 ```
 

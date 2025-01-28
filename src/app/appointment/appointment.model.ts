@@ -3,6 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { IsObject } from 'class-validator';
 import { BaseMongooseDocument } from 'src/common/model/base-mongoose-document.model';
 import { AppointmentStatus } from './enum/appointment-status.enum';
+import { AuthUserType } from 'src/common/enum/auth-user-type.enum';
 
 @Schema({
   timestamps: true,
@@ -28,6 +29,15 @@ export class Appointment extends BaseMongooseDocument {
 
   @Prop({ default: AppointmentStatus.PENDING })
   appointmentStatus: AppointmentStatus;
+
+  @Prop({ default: null })
+  cancelledAt: Date;
+
+  @Prop({
+    type: IsObject,
+    default: null
+  })
+  cancelledBy: AuthUser;
 }
 
 export const AppointmentSchema = SchemaFactory.createForClass(Appointment);

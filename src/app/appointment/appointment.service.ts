@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { Appointment } from './appointment.model';
 import { Pagination } from 'src/common/pagination/pagination';
 import { SlotQueryFilter } from './query-filter/appointment.query-filter';
@@ -26,6 +26,13 @@ export class AppointmentService {
         @InjectModel(Configs.name)
         private readonly configModel: Model<Configs>,
     ) { }
+
+    
+    async getAppointmentDetails(appointmentId: string): Promise<Appointment> {
+        const appointment = await this.appointmentModel.findById({ _id: appointmentId });
+        if (!appointment) throw new AppointmentNotFoundException(`APPOINTMENT ID ${appointmentId} NOT FOUND`);
+        return appointment;
+    }
 
     async getAvailableSlots(slotBookDate: string): Promise<any[]> {
         // Fetch configurations (slot duration, operational hours, etc.)
@@ -185,6 +192,7 @@ export class AppointmentService {
         appointment.slotsBooked = 0;  // Reset slots booked
         appointment.deleted = true;  // Soft delete the appointment
         appointment.deletedAt = new Date();  // Set the deletedAt timestamp
+        appointment.cancelledAt = new Date();  // Set the cancelledAt timestamp
 
         await this.appointmentListModel.updateOne(
             { date: appointment.date, "slots.time": appointment.time },
