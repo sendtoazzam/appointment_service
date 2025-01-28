@@ -5,20 +5,24 @@ import { HealthModule } from './health/health.module';
 import { AuthModule } from './auth/auth.module';
 import { SeedService } from './seed.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Users, usersSchema } from './auth/users.model';
+import { AppointmentModule } from './appointment/appointment.module';
+import { ConfigsModule } from './configs/configs.module';
+import { Configs, ConfigsSchema } from './configs/configs.model';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       {
-        name: Users.name,
-        schema: usersSchema,
+        name: Configs.name,
+        schema: ConfigsSchema,
       },
     ]),
     ConfigModule.forRoot({ isGlobal: true }),
     DatabaseModule,
     HealthModule,
     AuthModule,
+    AppointmentModule,
+    ConfigsModule,
   ],
   providers: [SeedService],
 })

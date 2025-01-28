@@ -4,7 +4,7 @@ import { CommonErrorType } from '../enum/common-error.enum';
 
 export abstract class CommonException extends BaseException {
   getNamespace(): string {
-    return process.env.APP_NAMESPACE;
+    return process.env.APP_NAME;
   }
 
   getType(): ExceptionErrorType {
