@@ -32,6 +32,13 @@
 $ npm install
 ```
 
+```scaffold
+$ sh make.sh <mmodule_name> // add --no-spec if you don't need it
+
+// for more information can use 
+$ sh make.sh --help
+```
+
 ## Running the app
 
 ```bash
